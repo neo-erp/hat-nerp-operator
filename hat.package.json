@@ -1,0 +1,173 @@
+{
+  "schema": "hathq://hat/package/v2",
+  "package_id": "hat/nerp-operator",
+  "repository_id": "hat-nerp-operator",
+  "version": "0.10.0",
+  "specification_version": "1.0.0",
+  "manifest": {
+    "schema": "hathq://hat/manifest/v1",
+    "id": "hat/nerp-operator",
+    "name": "NERP Operator",
+    "version": "0.10.0",
+    "capabilities": [
+      "nerp-capability-review",
+      "local-runtime-diagnosis"
+    ],
+    "decision_boundaries": [
+      "recommend-nerp-operation"
+    ],
+    "input_classifications": [
+      "internal-confidential"
+    ],
+    "output_classification": "internal",
+    "permissions": [
+      {
+        "resource": "nerp-projection",
+        "operations": [
+          "inspect-metadata",
+          "review-evidence",
+          "propose-recommendation"
+        ],
+        "mode": "propose"
+      }
+    ]
+  },
+  "operations": [
+    {
+      "id": "hathq://vocabulary/action/inspect-nerp-local/v1",
+      "input_schema": "hathq://hat-nerp-operator/inspect-nerp-local-input/v1",
+      "output_schema": "hathq://hat-nerp-operator/inspect-nerp-local-output/v1",
+      "context_plan": {
+        "id": "inspect-nerp-local-context",
+        "selectors": [
+          {
+            "namespace": "nerp-projection",
+            "projection_schema": "hathq://hat-nerp-operator/nerp-projection/v1",
+            "required": true
+          }
+        ],
+        "unresolved_policy": "record-unresolved"
+      },
+      "reducer": {
+        "id": "inspect-nerp-local-reducer",
+        "strategy": "typed-domain-event",
+        "event_schema": "hathq://hat-nerp-operator/inspect-nerp-local-event/v1",
+        "projection_schema": "hathq://hat-nerp-operator/inspect-nerp-local-projection/v1",
+        "conflict_policy": "reject"
+      },
+      "procedure": {
+        "id": "inspect-nerp-local-procedure",
+        "steps": [
+          {
+            "action_id": "hathq://vocabulary/action/inspect-nerp-local/v1",
+            "input_schema": "hathq://hat-nerp-operator/inspect-nerp-local-input/v1",
+            "output_schema": "hathq://hat-nerp-operator/inspect-nerp-local-output/v1"
+          }
+        ]
+      },
+      "handler": {
+        "kind": "declarative-hat",
+        "reference": "inspect-nerp-local-procedure"
+      }
+    }
+  ],
+  "catalog": {
+    "schema": "hathq://hat/semantic-catalog/v1",
+    "identity": {
+      "catalog_id": "hat-nerp-operator",
+      "version": 1,
+      "digest_sha256": "17846878c88727d1cfb628c2a84c39b0af60b06f6d4bbe6a4a9b3bb657f78141"
+    },
+    "owner_repository_id": "hat-nerp-operator",
+    "foundation": false,
+    "dependencies": [
+      {
+        "catalog_id": "hathq.foundation",
+        "version": 1,
+        "digest_sha256": "6b618dff030e551bafd6b1a70fe6daf71e2873de9c2230f4cf71e9ac9fbf2c0f"
+      }
+    ],
+    "incompatibilities": [],
+    "terms": [
+      {
+        "reference": {
+          "catalog_id": "hat-nerp-operator",
+          "catalog_digest_sha256": "17846878c88727d1cfb628c2a84c39b0af60b06f6d4bbe6a4a9b3bb657f78141",
+          "term_id": "hathq://vocabulary/entity/nerp-projection/v1",
+          "version": 1,
+          "definition_digest_sha256": "fc624654b1ad76504f0a44f0ebcd3f424326691aac1d8ec631f993e78d906d0c",
+          "kind": "entity-type"
+        },
+        "wire_schema": "hathq://hat-nerp-operator/nerp-projection/v1",
+        "semantic_icon": "generic",
+        "dependencies": [],
+        "is_a": [],
+        "domain": [],
+        "range": []
+      },
+      {
+        "reference": {
+          "catalog_id": "hat-nerp-operator",
+          "catalog_digest_sha256": "17846878c88727d1cfb628c2a84c39b0af60b06f6d4bbe6a4a9b3bb657f78141",
+          "term_id": "hathq://vocabulary/state/nerp-attention-item/v1",
+          "version": 1,
+          "definition_digest_sha256": "4d410602d678b51460086abc034d2af86756e7e2f8aecbd6d772649edcb2ef0e",
+          "kind": "state-type"
+        },
+        "wire_schema": "hathq://hat-nerp-operator/nerp-attention-item/v1",
+        "semantic_icon": "generic",
+        "dependencies": [],
+        "is_a": [],
+        "domain": [],
+        "range": []
+      },
+      {
+        "reference": {
+          "catalog_id": "hat-nerp-operator",
+          "catalog_digest_sha256": "17846878c88727d1cfb628c2a84c39b0af60b06f6d4bbe6a4a9b3bb657f78141",
+          "term_id": "hathq://vocabulary/action/inspect-nerp-local/v1",
+          "version": 1,
+          "definition_digest_sha256": "ed451d54694eeb4b4f8be9cb9bb8019c917484af261ddadaa7e875460dd6be95",
+          "kind": "action"
+        },
+        "wire_schema": "hathq://hat-nerp-operator/inspect-nerp-local-input/v1",
+        "semantic_icon": "generic",
+        "dependencies": [],
+        "is_a": [],
+        "domain": [],
+        "range": []
+      }
+    ],
+    "lexicalizations": [],
+    "frames": [
+      {
+        "frame_id": "inspect-nerp-local-procedure-frame",
+        "definition_digest_sha256": "3d195c2f3b71234604b63a66ce17f42acd6c8112ad42f1655f29847cd3d6785c",
+        "predicate": {
+          "catalog_id": "hat-nerp-operator",
+          "catalog_digest_sha256": "17846878c88727d1cfb628c2a84c39b0af60b06f6d4bbe6a4a9b3bb657f78141",
+          "term_id": "hathq://vocabulary/action/inspect-nerp-local/v1",
+          "version": 1,
+          "definition_digest_sha256": "ed451d54694eeb4b4f8be9cb9bb8019c917484af261ddadaa7e875460dd6be95",
+          "kind": "action"
+        },
+        "roles": [
+          {
+            "role": "actor",
+            "required": true,
+            "accepted_kinds": [
+              "entity-type"
+            ]
+          },
+          {
+            "role": "object",
+            "required": true,
+            "accepted_kinds": [
+              "concept"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
