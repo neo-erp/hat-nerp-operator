@@ -1,5 +1,6 @@
 #![forbid(unsafe_code)]
 
+mod bounded_input;
 mod worker;
 mod worker_io;
 mod worker_task;
