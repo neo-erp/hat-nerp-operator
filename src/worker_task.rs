@@ -126,14 +126,7 @@ fn read_digest_document(root: &Path, reference: &ActionReference) -> Result<Vec<
         return Err("input reference is not content-addressed".into());
     }
     let input_path = root.join(format!("{}.json", reference.reference));
-    if !input_path.symlink_metadata().map_err(message)?.is_file() {
-        return Err("input must be a regular file".into());
-    }
-    let file = fs::File::open(input_path).map_err(message)?;
-    if !file.metadata().map_err(message)?.is_file() {
-        return Err("input must be a regular file".into());
-    }
-    let bytes = crate::bounded_input::read_bounded(file)?;
+    let bytes = crate::bounded_input::read_document(&input_path)?;
     if bytes.len() > 1_048_576 || hex::encode(Sha256::digest(&bytes)) != reference.digest_sha256 {
         return Err("input digest differs".into());
     }
