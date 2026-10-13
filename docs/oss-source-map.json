@@ -1,0 +1,139 @@
+{
+  "repository": "neo-erp/hat-nerp-operator",
+  "purpose": "NERPの許可されたローカル状態を確認する役割の宣言と、入力・版の検証を利用できます。 / Provide the declared role interface for reviewing permitted local NERP state.",
+  "responsibility_boundary": "This HAT role owns its declared product invocation and exact capability/scope binding. Shared transport, document handling and authorization primitives use their managed owners. A role declaration alone is not evidence of an implemented external action.",
+  "packages": [
+    {
+      "manifest": "Cargo.toml",
+      "package": "hat-nerp-operator",
+      "ecosystem": "rust",
+      "description": null,
+      "interfaces": {
+        "lib": "src/lib.rs",
+        "features": {},
+        "bins": [
+          {
+            "name": "hat-nerp-operator-worker",
+            "path": "src/main.rs"
+          }
+        ],
+        "public_modules": [],
+        "public_reexports": [],
+        "implicit_bins": []
+      },
+      "declared_commands": {}
+    }
+  ],
+  "schema_definitions": [
+    "schemas/inspect-nerp-local-event-v1.schema.json",
+    "schemas/inspect-nerp-local-input-v1.schema.json",
+    "schemas/inspect-nerp-local-output-v1.schema.json",
+    "schemas/inspect-nerp-local-projection-v1.schema.json",
+    "schemas/nerp-projection-v1.schema.json"
+  ],
+  "test_sources": [
+    "src/bounded_input.rs",
+    "src/main.rs",
+    "tests/contracts.rs"
+  ],
+  "example_sources": [],
+  "workflow_definitions": [
+    {
+      "path": ".github/workflows/bounded-input.yml",
+      "jobs": [
+        {
+          "job": "input",
+          "condition": null,
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Install pinned Rust toolchain",
+              "run": "rustup toolchain install 1.97.0 --profile minimal --component rustfmt",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Check and test maintained bounded-input module",
+              "run": "rustfmt +1.97.0 --edition 2024 --check src/bounded_input.rs\nrustc +1.97.0 --edition 2024 --test src/bounded_input.rs -o \"$RUNNER_TEMP/bounded-input-tests\"\n\"$RUNNER_TEMP/bounded-input-tests\"\n",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/oss-policy.yml",
+      "jobs": [
+        {
+          "job": "repository-policy",
+          "condition": null,
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Verify repository policy",
+              "run": "python3 .github/oss-policy-check.py",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Verify policy regression tests",
+              "run": "cd .github && python3 -m unittest discover -s policy-tests",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Check policy types",
+              "run": "python3 -m venv \"$RUNNER_TEMP/policy-types\"\n\"$RUNNER_TEMP/policy-types/bin/pip\" install -r .github/policy/requirements.txt\n\"$RUNNER_TEMP/policy-types/bin/mypy\" --strict .github/policy .github/oss-policy-check.py .github/policy-tests\n",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/public-dependencies.yml",
+      "jobs": [
+        {
+          "job": "public-dependencies",
+          "condition": null,
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Install declared Rust toolchain",
+              "run": "rustup toolchain install 1.97.1 --profile minimal",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Test the locked official dependency graph",
+              "run": "cargo +1.97.1 test --locked --all-targets",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence_policy": "Declarations and source paths are not proof of an executed acceptance. Exact CI head and result are recorded separately. No live accounts or production acceptance is inferred."
+}
