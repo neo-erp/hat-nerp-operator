@@ -2,5 +2,11 @@
   "repository": "neo-erp/hat-nerp-operator",
   "github_id": 1399894141,
   "package_id": "hat/nerp-operator",
-  "binary": "hat-nerp-operator-worker"
+  "binary": "hat-nerp-operator-worker",
+  "required_workflows": [
+    ".github/workflows/bounded-input.yml",
+    ".github/workflows/oss-policy.yml",
+    ".github/workflows/public-dependencies.yml",
+    ".github/workflows/release-hat.yml"
+  ]
 }
